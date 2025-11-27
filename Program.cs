@@ -6,7 +6,7 @@ using projetoTP3_A2.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // --------------------------------------------------------
-// CONFIGURA��O DO BANCO DE DADOS SQL SERVER
+// CONFIGURAÇÃO DO BANCO DE DADOS SQL SERVER
 // --------------------------------------------------------
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -17,12 +17,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // --------------------------------------------------------
-// IDENTITY
+// IDENTITY COM ROLES
 // --------------------------------------------------------
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
+.AddRoles<IdentityRole<Guid>>() // habilita roles com chave Guid
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // --------------------------------------------------------
@@ -36,7 +37,7 @@ builder.Services.AddRazorPages();
 var app = builder.Build();
 
 // --------------------------------------------------------
-// PIPELINE DE REQUISI��O
+// PIPELINE DE REQUISIÇÃO
 // --------------------------------------------------------
 if (app.Environment.IsDevelopment())
 {
@@ -64,7 +65,31 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
-// Razor Pages (necess�rio para Identity)
+// --------------------------------------------------------
+// SEED DE ROLES
+// --------------------------------------------------------
+async Task CreateRoles(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+
+    string[] roleNames = { "Administrador", "Medico", "Farmaceutico", "Paciente" };
+
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid>(roleName));
+        }
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await CreateRoles(services);
+}
+
+// Razor Pages (necessário para Identity)
 app.MapRazorPages();
 
 app.Run();

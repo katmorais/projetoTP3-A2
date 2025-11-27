@@ -1,11 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+Ôªøusing System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -18,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using projetoTP3_A2.Models; // importa sua classe ApplicationUser
-using projetoTP3_A2.Models.Enum; // importa o enum Perfis
+using projetoTP3_A2.Models;
+using projetoTP3_A2.Models.Enum;
 
 namespace projetoTP3_A2.Areas.Identity.Pages.Account
 {
@@ -70,7 +63,7 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirme a senha")]
-            [Compare("Password", ErrorMessage = "As senhas n„o coincidem.")]
+            [Compare("Password", ErrorMessage = "As senhas n√£o coincidem.")]
             public string ConfirmPassword { get; set; }
 
             [Required]
@@ -78,7 +71,7 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
             public string Nome { get; set; }
 
             [Display(Name = "Perfil")]
-            public Perfis Perfil { get; set; } = Perfis.Paciente; // padr„o
+            public Perfis Perfil { get; set; } = Perfis.Paciente; // padr√£o
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -106,7 +99,10 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("Usu·rio criou uma nova conta com senha.");
+                    _logger.LogInformation("Usu√°rio criou uma nova conta com senha.");
+
+                    // üîë Atribui a Role correspondente ao enum
+                    await _userManager.AddToRoleAsync(user, user.Perfil.ToString());
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -147,8 +143,8 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"N„o foi possÌvel criar uma inst‚ncia de '{nameof(ApplicationUser)}'. " +
-                    $"Verifique se a classe tem um construtor sem par‚metros.");
+                throw new InvalidOperationException($"N√£o foi poss√≠vel criar uma inst√¢ncia de '{nameof(ApplicationUser)}'. " +
+                    $"Verifique se a classe tem um construtor sem par√¢metros.");
             }
         }
 
@@ -156,7 +152,7 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
         {
             if (!_userManager.SupportsUserEmail)
             {
-                throw new NotSupportedException("O UI padr„o requer um UserStore com suporte a email.");
+                throw new NotSupportedException("O UI padr√£o requer um UserStore com suporte a email.");
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
         }

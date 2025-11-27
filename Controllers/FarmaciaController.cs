@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using projetoTP3_A2.Data;
 using projetoTP3_A2.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace projetoTP3_A2.Controllers
 {
+    [Authorize(Roles = "Administrador")]
+
     public class FarmaciaController : Controller
     {
         private readonly ApplicationDbContext _context;
