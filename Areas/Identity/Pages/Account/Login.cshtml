@@ -91,61 +91,160 @@
     Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-5">
-    <div class="row">
-        <!-- Lado esquerdo: formulário -->
-        <div class="col-md-6 d-flex align-items-center">
-            <div class="w-100">
-                <h2 class="text-center mb-4">BEM VINDO</h2>
-                <form id="account" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #E7FDFB;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-                    <div class="form-floating mb-3">
-                        <input asp-for="Input.Email" class="form-control" placeholder="Digite seu email" />
-                        <label asp-for="Input.Email">Email</label>
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
+    .login-container {
+        display: flex;
+        min-height: 100vh;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
 
-                    <div class="form-floating mb-3">
-                        <input asp-for="Input.Password" class="form-control" placeholder="Senha" />
-                        <label asp-for="Input.Password">Senha</label>
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
+    .login-form,
+    .image-side {
+        flex: 1 1 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        <label class="form-check-label" asp-for="Input.RememberMe">
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
-                    </div>
+    .image-side {
+        flex: 1;
+        position: relative;
+        background-image: url('/images/medico.png');
+        background-size: cover;
+        background-position: center;
+    }
 
-                    <button type="submit" class="btn btn-success w-100 mb-2">Entrar</button>
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(89, 190, 175, 0.8); /* #59BEAF com 80% opacidade */
+    }
 
-                    @if ((Model.ExternalLogins?.Count ?? 0) > 0)
-                    {
-                        <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                            <button type="submit" class="btn btn-outline-light w-100 border mb-3" name="provider" value="Google">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="height:20px; margin-right:8px;" />
-                                Entrar com Google
-                            </button>
-                        </form>
-                    }
+    .login-form {
+        flex: 1;
+        background-color: #E7FDFB;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+    }
 
-                    <p class="text-center mt-3">
-                        Não tem uma conta?
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-danger fw-bold">Cadastre-se gratuitamente!</a>
-                    </p>
+    .form-box {
+        width: 100%;
+        max-width: 400px;
+    }
 
-                    <p class="text-center">
-                        <a asp-page="./ForgotPassword">Esqueceu sua senha?</a>
-                    </p>
-                </form>
-            </div>
-        </div>
+        .form-box h2 {
+            color: #15A090;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
 
-        <!-- Lado direito: imagem -->
-        <div class="col-md-6 d-none d-md-block">
-            <img src="/images/medico-login.jpg" alt="Profissional da saúde" class="img-fluid rounded shadow" />
+    .form-control,
+    .form-check-label {
+        border-color: #15A090;
+        color: #15A090;
+    }
+
+    .btn-login {
+        background-color: #15A090;
+        color: white;
+        font-weight: bold;
+        border: none;
+    }
+
+        .btn-login:hover {
+            background-color: #128876;
+        }
+
+    .btn-google {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        color: #444;
+        font-weight: 500;
+    }
+
+        .btn-google img {
+            height: 20px;
+            margin-right: 8px;
+        }
+
+    .highlight-link {
+        color: #d9534f;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+        .highlight-link:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="login-container">
+    <!-- Imagem com filtro à esquerda -->
+    <div class="image-side">
+        <div class="image-overlay"></div>
+    </div>
+
+    <!-- Formulário à direita -->
+    <div class="login-form">
+        <div class="form-box">
+            <h2>BEM VINDO</h2>
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" placeholder="Digite seu email" />
+                    <label asp-for="Input.Email">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" placeholder="Senha" />
+                    <label asp-for="Input.Password">Senha</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label class="form-check-label" asp-for="Input.RememberMe">
+                        Remember me?
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-login w-100 mb-3">Entrar</button>
+
+                @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+                {
+                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <button type="submit" class="btn btn-google w-100 mb-3" name="provider" value="Google">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+                            Entrar com Google
+                        </button>
+                    </form>
+                }
+
+                <p class="text-center mt-3">
+                    Não tem uma conta?
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="highlight-link">Cadastre-se gratuitamente!</a>
+                </p>
+
+                <p class="text-center">
+                    <a asp-page="./ForgotPassword">Esqueceu sua senha?</a>
+                </p>
+            </form>
         </div>
     </div>
 </div>
