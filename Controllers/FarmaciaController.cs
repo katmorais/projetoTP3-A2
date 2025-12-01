@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 namespace projetoTP3_A2.Controllers
 {
     [Authorize(Roles = "Administrador")]
-
     public class FarmaciaController : Controller
     {
         private readonly ApplicationDbContext _context;
