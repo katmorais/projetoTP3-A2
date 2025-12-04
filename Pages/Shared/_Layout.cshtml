@@ -1,4 +1,34 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@{
+    string perfil = User.FindFirst("Perfil")?.Value;
+    string logoController = "Home";
+    string logoAction = "Index";
+
+    switch (perfil)
+    {
+        case "Administrador":
+            logoController = "Home";
+            logoAction = "Index";
+            break;
+
+        case "Medico":
+            logoController = "MedicoHome";
+            logoAction = "Index";
+            break;
+
+        case "Farmaceutico":
+            logoController = "Home";
+            logoAction = "FarmaceuticoHome";
+            break;
+
+        case "Paciente":
+            logoController = "PacienteHome";
+            logoAction = "Index";
+            break;
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,16 +54,17 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 custom-navbar">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand" asp-controller="@logoController" asp-action="@logoAction">
                     <img src="~/images/logo.png" alt="Logo" style="height:40px;" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex">
                     <ul class="navbar-nav me-auto">
-                        <!-- Se quiser adicionar links aqui futuramente -->
+                        <!-- Links adicionais podem ser adicionados aqui -->
                     </ul>
 
                     <div class="ms-auto">

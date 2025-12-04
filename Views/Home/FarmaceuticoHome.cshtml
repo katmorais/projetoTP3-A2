@@ -1,3 +1,82 @@
-﻿<h2>
-    teste
-</h2>
+﻿@{
+    ViewData["Title"] = "Área do Farmacêutico";
+    Layout = "_Layout"; // usa o layout padrão com navbar e rodapé
+}
+
+<style>
+    .btn-pesquisar {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-pesquisar:hover {
+            background-color: #118072; /* tom mais escuro no hover */
+            color: #fff;
+        }
+
+    .table-custom thead tr th {
+        background-color: #D0F5F2 !important;
+        color: #14A091 !important;
+    }
+
+    .table-custom tbody tr td {
+        background-color: #E7FDFB !important;
+        color: #14A091 !important;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #C4ECE9 !important;
+        color: #14A091 !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Coluna do menu lateral -->
+    <div class="col-md-2">
+        <partial name="_Sidebar" />
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="col-md-10">
+        <h2 style="color:#14A091;" class="mb-4">Prontuários dos Pacientes</h2>
+
+        <!-- Campo de pesquisa -->
+        <form asp-action="PesquisarProntuario" method="get" class="d-flex mb-3">
+            <input type="text" name="query" class="form-control me-2" placeholder="Digite o nome do paciente ou número do prontuário..." />
+            <button type="submit" class="btn btn-sm btn-pesquisar">Pesquisar</button>
+        </form>
+
+        <!-- Tabela de resultados -->
+        <table class="table table-hover border rounded shadow-sm table-custom">
+            <thead>
+                <tr>
+                    <th>Nome do Paciente</th>
+                    <th>Número do Prontuário</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* Exemplo de dados mockados — depois você substitui pelo Model *@
+                <tr>
+                    <td>Maria Silva</td>
+                    <td>PR-00123</td>
+                    <td>Em aberto</td>
+                    <td>
+                        <a asp-action="DarBaixa" asp-route-id="123" class="btn btn-sm btn-edit me-1">Dar Baixa</a>
+                        <a asp-action="DetalhesProntuario" asp-route-id="123" class="btn btn-sm btn-details me-1">Detalhes</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>João Souza</td>
+                    <td>PR-00456</td>
+                    <td>Finalizado</td>
+                    <td>
+                        <a asp-action="DetalhesProntuario" asp-route-id="456" class="btn btn-sm btn-details">Detalhes</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
