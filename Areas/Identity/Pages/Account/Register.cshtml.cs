@@ -1,9 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -13,6 +8,12 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using projetoTP3_A2.Models;
 using projetoTP3_A2.Models.Enum;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace projetoTP3_A2.Areas.Identity.Pages.Account
 {
@@ -122,8 +123,31 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        // 🔑 Faz login já com o claim Perfil
+                        var claims = new List<Claim>
+                        {
+                            new Claim("Perfil", user.Perfil.ToString())
+                        };
+                        await _signInManager.SignInWithClaimsAsync(user, isPersistent: false, claims);
+
+                        // 🚀 Redireciona conforme o perfil
+                        switch (user.Perfil)
+                        {
+                            case Perfis.Administrador:
+                                return LocalRedirect("~/Home/Index");
+
+                            case Perfis.Medico:
+                                return LocalRedirect("~/Home/MedicoHome");
+
+                            case Perfis.Farmaceutico:
+                                return LocalRedirect("~/Home/FarmaceuticoHome");
+
+                            case Perfis.Paciente:
+                                return LocalRedirect("~/Home/PacienteHome");
+
+                            default:
+                                return LocalRedirect(returnUrl);
+                        }
                     }
                 }
                 foreach (var error in result.Errors)
