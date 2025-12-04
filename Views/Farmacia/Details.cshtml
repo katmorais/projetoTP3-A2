@@ -2,37 +2,80 @@
 
 @{
     ViewData["Title"] = "Detalhes da Farmácia";
+    Layout = "_Layout";
 }
 
-<div class="row">
-    <!-- Coluna do menu lateral -->
+<style>
+    h2.text-destaque {
+        color: #14A091;
+        font-weight: 600;
+    }
+
+    .table-custom thead tr th {
+        background-color: #D0F5F2 !important;
+        color: #14A091 !important;
+    }
+
+    .table-custom tbody tr td {
+        background-color: #E7FDFB !important;
+        color: #14A091 !important;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #C4ECE9 !important;
+        color: #14A091 !important;
+    }
+
+    .btn-voltar {
+        background-color: #E7FDFB;
+        color: #14A091;
+        border: none;
+    }
+
+        .btn-voltar:hover {
+            background-color: #D0F5F2;
+            color: #118072;
+        }
+
+    .btn-editar {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-editar:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+</style>
+
+<div class="container-fluid">
     <div class="col-md-2">
         <partial name="_Sidebar" />
     </div>
 
     <!-- Coluna do conteúdo principal -->
     <div class="col-md-10">
-        <h2 class="text-primary mb-4">🔍 Detalhes da Farmácia</h2>
+        <h2 class="text-destaque mb-4">Detalhes da Farmácia</h2>
 
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-3">🏥 Nome</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
-
-                    <dt class="col-sm-3">📍 Endereço</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Endereco)</dd>
-                </dl>
-            </div>
-        </div>
+        <table class="table table-hover border rounded shadow-sm table-custom">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Endereço</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Nome</td>
+                    <td>@Model.Endereco</td>
+                </tr>
+            </tbody>
+        </table>
 
         <div class="d-flex justify-content-between mt-3">
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                ⬅️ Voltar
-            </a>
-            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
-                ✏️ Editar
-            </a>
+            <a asp-action="Index" class="btn btn-sm btn-voltar">Voltar</a>
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-sm btn-editar">Editar</a>
         </div>
     </div>
 </div>

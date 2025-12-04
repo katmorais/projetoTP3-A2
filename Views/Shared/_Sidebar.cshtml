@@ -42,10 +42,6 @@
 </style>
 <div class="sidebar p-3">
     <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="Home" asp-action="Index">🏠 Dashboard</a>
-        </li>
-
         @if (roles.Contains("Administrador") || roles.Contains("Medico"))
         {
             <li class="nav-item">
