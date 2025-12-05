@@ -52,6 +52,16 @@
             </li>
         }
 
+        @if (roles.Contains("Administrador") )
+        {
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" asp-controller="Patologia" asp-action="Index">
+                    <img src="~/images/icons/patoplogia_svg.svg" alt="Patologia" class="sidebar-icon" />
+                    <span>Patologias</span>
+                </a>
+            </li>
+        }
+
         @if (roles.Contains("Administrador") || roles.Contains("Farmaceutico"))
         {
             <li class="nav-item">

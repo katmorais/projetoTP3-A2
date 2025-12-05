@@ -30,5 +30,6 @@ namespace projetoTP3_A2.Data
             });
         }
         public DbSet<projetoTP3_A2.Models.Medicamento> Medicamento { get; set; } = default!;
+        public DbSet<projetoTP3_A2.Models.Patologia> Patologia { get; set; } = default!;
     }
 }
