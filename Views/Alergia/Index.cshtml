@@ -2,50 +2,140 @@
 
 @{
     ViewData["Title"] = "Área do Administrador";
-    Layout = "_Layout"; // usa o layout padrão
+    Layout = "_Layout";
 }
 
+<style>
+    .titulo-verde {
+        color: #14A091;
+        font-weight: 600;
+    }
+
+        .titulo-verde:hover {
+            color: #0F6E63;
+        }
+
+    .btn-edit {
+        background-color: #A7CFFF;
+        color: #0A3F7F;
+        border: none;
+    }
+
+        .btn-edit:hover {
+            background-color: #8AB2F0;
+            color: #06306A;
+        }
+
+    .btn-details {
+        background-color: #7FDAD1;
+        color: #0F6E63;
+        border: none;
+    }
+
+        .btn-details:hover {
+            background-color: #5FCCBF;
+            color: #0B504D;
+        }
+
+    .btn-delete {
+        background-color: #F5A6A5;
+        color: #A93A39;
+        border: none;
+    }
+
+        .btn-delete:hover {
+            background-color: #E98C8B;
+            color: #7C2928;
+        }
+
+    .btn-nova-alergia {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-nova-alergia:hover {
+            background-color: #118072;
+            color: #fff;
+        }
+
+    .table-custom thead tr th {
+        background-color: #A7E8DF !important;
+        color: #0F6E63 !important;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr td {
+        background-color: #F9F9F9 !important;
+        color: #333 !important;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr:hover td {
+        background-color: #E0F2F1 !important;
+    }
+
+    .card-custom {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+        padding: 1rem;
+        margin-bottom: 2rem;
+        border-radius: 0.5rem;
+        background-color: #fff;
+    }
+
+    .btn-sm {
+        border-radius: 0.3rem;
+    }
+</style>
+
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
+
+    <!-- Sidebar -->
+    <div class="col-md-2 float-start">
         <partial name="_Sidebar" />
     </div>
 
-    <h1>Index</h1>
+    <!-- Conteúdo principal -->
+    <div class="col-md-10 float-start">
+        <h2 class="mb-4 titulo-verde">Lista de Alergias</h2>
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nome)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Reacao)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Reacao)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        <div class="d-flex justify-content-end mb-3">
+            <a asp-action="Create" class="btn btn-sm btn-nova-alergia">
+                Nova Alergia
+            </a>
+        </div>
 
-<</div>
+        <div class="card card-custom">
+            <div class="table-responsive">
+                <table class="table table-hover border rounded shadow-sm table-custom text-center">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.First().Nome)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Reacao)</th>
+                            <th style="width: 220px;">Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Nome</td>
+                                <td>@item.Reacao</td>
+                                <td class="d-flex justify-content-center gap-1">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit">Editar</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details">Detalhes</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">Excluir</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

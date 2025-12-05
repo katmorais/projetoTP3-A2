@@ -1,33 +1,45 @@
 ﻿@model projetoTP3_A2.Models.Alergia
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Excluir Alergia";
+    Layout = "_Layout";
 }
 
-<h1>Delete</h1>
+<div class="container-fluid">
+    <div class="row">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Alergia</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Reacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Reacao)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <partial name="_Sidebar" />
+        </div>
+
+        <!-- Conteúdo principal -->
+        <div class="col-md-10">
+            <h2 class="mb-4" style="color:#6c757d;">Excluir Alergia</h2>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="mb-3" style="color:#6c757d;">Tem certeza que deseja excluir esta alergia?</h4>
+
+                    <dl class="row">
+                        <dt class="col-sm-3 text-muted">Nome</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+                        <dt class="col-sm-3 text-muted">Reação</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Reacao)</dd>
+                    </dl>
+
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-flex justify-content-between">
+                            <input type="submit" value="Excluir" class="btn btn-danger" />
+                            <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

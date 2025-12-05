@@ -2,85 +2,46 @@
 
 @{
     ViewData["Title"] = "Excluir Farmácia";
+    Layout = "_Layout";
 }
 
-<style>
-    h2.text-destaque {
-        color: #14A091;
-        font-weight: 600;
-    }
-
-    .table-custom thead tr th {
-        background-color: #D0F5F2 !important;
-        color: #14A091 !important;
-    }
-
-    .table-custom tbody tr td {
-        background-color: #E7FDFB !important;
-        color: #14A091 !important;
-    }
-
-    .table-custom tbody tr:hover td {
-        background-color: #C4ECE9 !important;
-        color: #14A091 !important;
-    }
-
-    .btn-voltar {
-        background-color: #E7FDFB;
-        color: #14A091;
-        border: none;
-    }
-
-        .btn-voltar:hover {
-            background-color: #D0F5F2;
-            color: #118072;
-        }
-
-    .btn-excluir {
-        background-color: #f8d7da;
-        color: #dc3545;
-        border: none;
-    }
-
-        .btn-excluir:hover {
-            background-color: #f1b0b7;
-            color: #bb2d3b;
-        }
-</style>
-
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
-    </div>
+    <div class="row">
 
-    <!-- Coluna do conteúdo principal -->
-    <div class="col-md-10">
-        <h2 class="text-destaque mb-4">Excluir Farmácia</h2>
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <partial name="_Sidebar" />
+        </div>
 
-        <h5 class="mb-3">Tem certeza que deseja excluir este registro?</h5>
+        <!-- Conteúdo principal -->
+        <div class="col-md-10">
+            <h2 class="mb-4" style="color:#6c757d;">Excluir Farmácia</h2>
 
-        <table class="table table-hover border rounded shadow-sm table-custom">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Endereço</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Model.Nome</td>
-                    <td>@Model.Endereco</td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="mb-3" style="color:#6c757d;">Tem certeza que deseja excluir esta farmácia?</h4>
 
-        <form asp-action="Delete" class="mt-3">
-            <input type="hidden" asp-for="Id" />
-            <div class="d-flex justify-content-between">
-                <a asp-action="Index" class="btn btn-sm btn-voltar">Voltar</a>
-                <button type="submit" class="btn btn-sm btn-excluir">Confirmar Exclusão</button>
+                    <dl class="row">
+
+                        <dt class="col-sm-3 text-muted">Nome</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+
+                        <dt class="col-sm-3 text-muted">Endereço</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Endereco)</dd>
+
+                    </dl>
+
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-flex justify-content-between">
+                            <input type="submit" value="Excluir" class="btn btn-danger" />
+                            <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
+
     </div>
 </div>
