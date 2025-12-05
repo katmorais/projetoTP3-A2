@@ -76,15 +76,6 @@
         background-color: #E0F2F1 !important;
     }
 
-    .card-custom {
-        border: none;
-        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
-        padding: 1rem;
-        margin-bottom: 2rem;
-        border-radius: 0.5rem;
-        background-color: #fff;
-    }
-
     .btn-sm {
         border-radius: 0.3rem;
     }
@@ -93,13 +84,13 @@
 <div class="container-fluid">
 
     <!-- Sidebar -->
-    <div class="col-md-2 float-start">
+    <div class="col-md-2">
         <partial name="_Sidebar" />
     </div>
 
     <!-- Conteúdo principal -->
-    <div class="col-md-10 float-start">
-        <h2 class="mb-4 titulo-verde">Lista de Alergias</h2>
+    <div class="col-md-10">
+        <h2 class="mb-4 titulo-verde">Alergias Cadastradas</h2>
 
         <div class="d-flex justify-content-end mb-3">
             <a asp-action="Create" class="btn btn-sm btn-nova-alergia">
@@ -107,35 +98,32 @@
             </a>
         </div>
 
-        <div class="card card-custom">
-            <div class="table-responsive">
-                <table class="table table-hover border rounded shadow-sm table-custom text-center">
-                    <thead>
+        <div class="table-responsive">
+            <table class="table table-hover border rounded shadow-sm table-custom text-center">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.First().Nome)</th>
+                        <th>@Html.DisplayNameFor(model => model.First().Reacao)</th>
+                        <th style="width: 220px;">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
                         <tr>
-                            <th>@Html.DisplayNameFor(model => model.First().Nome)</th>
-                            <th>@Html.DisplayNameFor(model => model.First().Reacao)</th>
-                            <th style="width: 220px;">Ações</th>
+                            <td>@item.Nome</td>
+                            <td>@item.Reacao</td>
+                            <td class="d-flex justify-content-center gap-1">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit">Editar</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details">Detalhes</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">Excluir</a>
+                            </td>
                         </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.Nome</td>
-                                <td>@item.Reacao</td>
-                                <td class="d-flex justify-content-center gap-1">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit">Editar</a>
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details">Detalhes</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">Excluir</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
-    </div>
 
+    </div>
 </div>
