@@ -62,12 +62,12 @@
             </li>
         }
 
-        @if (roles.Contains("Administrador") || roles.Contains("Paciente"))
+        @if (roles.Contains("Administrador") || roles.Contains("Medicamento"))
         {
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Paciente" asp-action="Index">
-                    <img src="~/images/icons/patient_svg.svg" alt="Paciente" class="sidebar-icon" />
-                    <span>Paciente</span>
+                <a class="nav-link d-flex align-items-center" asp-controller="Medicamento" asp-action="Index">
+                    <img src="~/images/icons/medicamento_svg.svg" alt="Medicamento" class="sidebar-icon" />
+                    <span>Medicamentos</span>
                 </a>
             </li>
         }

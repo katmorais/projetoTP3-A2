@@ -14,6 +14,13 @@ namespace projetoTP3_A2.Controllers
             return View();
         }
 
+        [Authorize(Policy = "AdministradorPolicy")]
+        public IActionResult MedicamentoHome()
+        {
+            ViewData["Title"] = "Área do médico"; // garante que não será null
+            return View();
+        }
+
         [Authorize(Policy = "FarmaceuticoPolicy")]
         public IActionResult FarmaceuticoHome()
         {
@@ -34,5 +41,6 @@ namespace projetoTP3_A2.Controllers
             ViewData["Title"] = "Área do Paciente";
             return View(); // procura Views/Home/PacienteHome.cshtml
         }
+
     }
 }
