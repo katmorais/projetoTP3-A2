@@ -1,95 +1,87 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using projetoTP3_A2.Models
-@inject UserManager<ApplicationUser> UserManager
 
 @{
-    var user = await UserManager.GetUserAsync(User);
-    var roles = await UserManager.GetRolesAsync(user);
+    string actionInicial = "Index";
+
+    if (User.IsInRole("Medico"))
+    {
+        actionInicial = "MedicoHome";
+    }
+    else if (User.IsInRole("Farmaceutico"))
+    {
+        actionInicial = "FarmaceuticoHome";
+    }
+    else if (User.IsInRole("Paciente"))
+    {
+        actionInicial = "PacienteHome";
+    }
 }
-<style>
-    .sidebar {
-        position: fixed;
-        top: 70px; /* altura da navbar */
-        left: 0;
-        width: 220px;
-        height: calc(100vh - 70px);
-        background-color: #E7FDFB;
-        padding-top: 20px;
-        border-right: 1px solid #dee2e6;
-        overflow-y: auto;
-        z-index: 1000;
-    }
 
-        .sidebar .nav-link {
-            color: #273240;
-            font-weight: 500;
-            padding: 10px 20px;
-            display: block;
-            transition: background-color 0.2s ease;
-        }
+<div class="sidebar-container p-3">
+    <ul class="nav flex-column sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Home" asp-action="@actionInicial">
+                <i class="bi bi-house-door-fill bi-icon"></i>
+                <span>Início</span>
+            </a>
+        </li>
 
-            .sidebar .nav-link:hover {
-                background-color: #d0f5f2;
-                border-radius: 4px;
-            }
-
-    .sidebar-icon {
-        height: 1em; /* altura igual ao tamanho da fonte */
-        width: auto; /* mantém proporção */
-        margin-right: 8px; /* espaço entre ícone e texto */
-        vertical-align: middle; /* alinha com o texto */
-    }
-</style>
-<div class="sidebar p-3">
-    <ul class="nav flex-column">
-        @if (roles.Contains("Administrador") || roles.Contains("Medico"))
+        @if (User.Identity.IsAuthenticated)
         {
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Medico" asp-action="Pacientes">
-                    <img src="~/images/icons/patient_svg.svg" alt="Pacientes" class="sidebar-icon" />
+                <a class="nav-link" asp-controller="Prescricao" asp-action="Index">
+                    <i class="bi bi-file-medical-fill bi-icon"></i>
+                    <span>Prescrições</span>
+                </a>
+            </li>
+        }
+
+        @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Medico" asp-action="Pacientes">
+                    <i class="bi bi-people-fill bi-icon"></i>
                     <span>Pacientes</span>
                 </a>
             </li>
         }
 
-        @if (roles.Contains("Administrador") )
+        @if (User.IsInRole("Administrador") || User.IsInRole("Medico") || User.IsInRole("Farmaceutico"))
         {
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Patologia" asp-action="Index">
-                    <img src="~/images/icons/patoplogia_svg.svg" alt="Patologia" class="sidebar-icon" />
-                    <span>Patologias</span>
-                </a>
-            </li>
-        }
-
-        @if (roles.Contains("Administrador"))
-        {
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Alergia" asp-action="Index">
-                    <img src="~/images/icons/alergia_svg.svg" alt="Alergia" class="sidebar-icon" />
-                    <span>Alergias</span>
-                </a>
-            </li>
-        }
-
-        @if (roles.Contains("Administrador"))
-        {
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Medicamento" asp-action="Index">
-                    <img src="~/images/icons/medicamento_svg.svg" alt="Medicamento" class="sidebar-icon" />
+                <a class="nav-link" asp-controller="Medicamento" asp-action="Index">
+                    <i class="bi bi-capsule bi-icon"></i>
                     <span>Medicamentos</span>
                 </a>
             </li>
         }
 
-        @if (roles.Contains("Administrador") || roles.Contains("Farmaceutico"))
+        @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
         {
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center" asp-controller="Farmacia" asp-action="Index">
-                    <img src="~/images/icons/pharmacy_svg.svg" alt="Farmácia" class="sidebar-icon" />
-                    <span>Farmácia</span>
+                <a class="nav-link" asp-controller="Patologia" asp-action="Index">
+                    <i class="bi bi-heart-pulse-fill bi-icon"></i>
+                    <span>Patologias</span>
                 </a>
             </li>
         }
+
+        @if (User.IsInRole("Administrador") || User.IsInRole("Medico"))
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Alergia" asp-action="Index">
+                    <i class="bi bi-exclamation-triangle-fill bi-icon"></i>
+                    <span>Alergias</span>
+                </a>
+            </li>
+        }
+
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Farmacia" asp-action="Index">
+                <i class="bi bi-shop bi-icon"></i>
+                <span>Farmácias</span>
+            </a>
+        </li>
     </ul>
 </div>

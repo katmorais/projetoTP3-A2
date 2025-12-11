@@ -6,15 +6,13 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row min-vh-100">
 
-        <!-- Sidebar -->
-        <div class="col-md-2">
+        <div class="col-md-2 p-0">
             <partial name="_Sidebar" />
         </div>
 
-        <!-- Conteúdo principal -->
-        <div class="col-md-10">
+        <div class="col-md-10 p-4">
             <h2 class="mb-4" style="color:#14A091;">Detalhes da Farmácia</h2>
 
             <div class="card shadow-sm border-0">
@@ -22,18 +20,33 @@
                     <dl class="row">
 
                         <dt class="col-sm-3 text-muted">Nome</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+                        <dd class="col-sm-9 fs-5">@Html.DisplayFor(model => model.Nome)</dd>
+
+                        <hr class="my-3 text-muted" />
+
+                        <dt class="col-sm-3 text-muted">CEP</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Cep)</dd>
 
                         <dt class="col-sm-3 text-muted">Endereço</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Endereco)</dd>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Logradouro), @Html.DisplayFor(model => model.Numero)</dd>
+
+                        <dt class="col-sm-3 text-muted">Complemento</dt>
+                        <dd class="col-sm-9">
+                            @(string.IsNullOrEmpty(Model.Complemento) ? "-" : Model.Complemento)
+                        </dd>
+
+                        <dt class="col-sm-3 text-muted">Bairro</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Bairro)</dd>
+
+                        <dt class="col-sm-3 text-muted">Cidade/UF</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Localidade) / @Html.DisplayFor(model => model.Uf)</dd>
 
                     </dl>
 
                     <div class="mt-4 d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
                         <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn"
                            style="background-color:#14A091;color:white;">Editar</a>
-
-                        <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
                     </div>
                 </div>
             </div>

@@ -1,46 +1,82 @@
 ﻿@{
     ViewData["Title"] = "Página Inicial";
-    Layout = "_Layout"; // usa o layout padrão com navbar e rodapé
+    Layout = "_Layout";
 }
+
+<style>
+    .card-hover:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    .titulo-verde { color: #14A091; font-weight: 600; }
+    .bg-verde-suave { background-color: #e0f2f1; color: #004d40; }
+</style>
+
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
-    </div>
-    <div class="container mt-4">
-        <h1 class="text-primary">Bem-vindo, @User.Identity.Name!</h1>
-        <p class="lead">Você está logado no sistema de saúde.</p>
+    <div class="row min-vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
+        </div>
 
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Farmácia</h5>
-                        <p class="card-text">Gerencie os medicamentos e estoques.</p>
-                        <a asp-controller="Farmacia" asp-action="Index" class="btn btn-success">Acessar</a>
+        <div class="col-md-10 p-4">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="titulo-verde">Painel Administrativo</h2>
+                    <p class="text-muted">Bem-vindo, @User.Identity?.Name! Gerencie o sistema por aqui.</p>
+                </div>
+                <span class="badge bg-verde-suave p-2 fs-6">
+                    <i class="bi bi-shield-lock"></i> Administrador
+                </span>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 card-hover">
+                        <div class="card-body text-center">
+                            <i class="bi bi-shop fs-1 text-success mb-3"></i>
+                            <h5 class="card-title">Farmácias</h5>
+                            <p class="card-text text-muted">Gerencie unidades e endereços.</p>
+                            <a asp-controller="Farmacia" asp-action="Index" class="btn btn-outline-success w-100">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 card-hover">
+                        <div class="card-body text-center">
+                            <i class="bi bi-capsule fs-1 text-primary mb-3"></i>
+                            <h5 class="card-title">Medicamentos</h5>
+                            <p class="card-text text-muted">Cadastro de drogas e dosagens.</p>
+                            <a asp-controller="Medicamento" asp-action="Index" class="btn btn-outline-primary w-100">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 card-hover">
+                        <div class="card-body text-center">
+                            <i class="bi bi-exclamation-octagon fs-1 text-danger mb-3"></i>
+                            <h5 class="card-title">Alergias</h5>
+                            <p class="card-text text-muted">Gerencie tipos de reações alérgicas.</p>
+                            <a asp-controller="Alergia" asp-action="Index" class="btn btn-outline-danger w-100">Acessar</a>
+                        </div>
+                    </div>
+                </div>
+                
+                 <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 card-hover">
+                        <div class="card-body text-center">
+                            <i class="bi bi-heart-pulse fs-1 text-warning mb-3"></i>
+                            <h5 class="card-title">Patologias</h5>
+                            <p class="card-text text-muted">Cadastro de doenças crônicas.</p>
+                            <a asp-controller="Patologia" asp-action="Index" class="btn btn-outline-warning w-100">Acessar</a>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Médicos</h5>
-                        <p class="card-text">Visualize e gerencie os médicos cadastrados.</p>
-                        <a asp-controller="Medico" asp-action="Index" class="btn btn-info">Acessar</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Farmaceuticos</h5>
-                        <p class="card-text">Gerencie os farmaceuticos.</p>
-                        <a asp-controller="Farmaceutico" asp-action="Index" class="btn btn-warning">Acessar</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

@@ -1,11 +1,42 @@
 ﻿@{
     ViewData["Title"] = "Área do Paciente";
-    Layout = "_Layout"; // usa o layout padrão com navbar e rodapé
+    Layout = "_Layout";
 }
 
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
+    <div class="row min-vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2 style="color:#14A091;" class="mb-4">Minha Saúde</h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="bi bi-receipt"></i> Minhas Receitas</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Acesse suas prescrições médicas e status de dispensação.</p>
+                            <a asp-controller="Prescricao" asp-action="Index" class="btn btn-primary w-100">Ver Receitas</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="bi bi-geo-alt"></i> Farmácias Próximas</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Encontre farmácias cadastradas para retirar seus medicamentos.</p>
+                            <a asp-controller="Farmacia" asp-action="Index" class="btn btn-outline-success w-100">Buscar Farmácias</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

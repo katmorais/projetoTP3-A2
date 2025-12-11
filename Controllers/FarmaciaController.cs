@@ -1,33 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using projetoTP3_A2.Data;
 using projetoTP3_A2.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using projetoTP3_A2.Services.Interfaces;
 
 namespace projetoTP3_A2.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize]
     public class FarmaciaController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IViaCepService _viaCepService;
 
-        public FarmaciaController(ApplicationDbContext context)
+        public FarmaciaController(ApplicationDbContext context, IViaCepService viaCepService)
         {
             _context = context;
+            _viaCepService = viaCepService;
         }
 
-        // GET: Farmacia
+        [Authorize(Roles = "Administrador,Medico,Farmaceutico,Paciente")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Farmacia.ToListAsync());
         }
 
-        // GET: Farmacia/Details/5
+        [Authorize(Roles = "Administrador,Medico,Farmaceutico,Paciente")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -45,21 +43,36 @@ namespace projetoTP3_A2.Controllers
             return View(farmacia);
         }
 
-        // GET: Farmacia/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Farmacia/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Endereco")] Farmacia farmacia)
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Create([Bind("Id,Nome,Cep,Numero,Complemento")] Farmacia farmacia)
         {
             if (ModelState.IsValid)
             {
+                if (!string.IsNullOrEmpty(farmacia.Cep))
+                {
+                    var endereco = await _viaCepService.BuscarEnderecoPorCepAsync(farmacia.Cep);
+                    if (endereco != null)
+                    {
+                        farmacia.Logradouro = endereco.Logradouro;
+                        farmacia.Bairro = endereco.Bairro;
+                        farmacia.Localidade = endereco.Localidade;
+                        farmacia.Uf = endereco.Uf;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Cep", "CEP não encontrado.");
+                        return View(farmacia);
+                    }
+                }
+
                 farmacia.Id = Guid.NewGuid();
                 _context.Add(farmacia);
                 await _context.SaveChangesAsync();
@@ -68,7 +81,7 @@ namespace projetoTP3_A2.Controllers
             return View(farmacia);
         }
 
-        // GET: Farmacia/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -84,12 +97,10 @@ namespace projetoTP3_A2.Controllers
             return View(farmacia);
         }
 
-        // POST: Farmacia/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nome,Endereco")] Farmacia farmacia)
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nome,Cep,Numero,Complemento")] Farmacia farmacia)
         {
             if (id != farmacia.Id)
             {
@@ -100,6 +111,18 @@ namespace projetoTP3_A2.Controllers
             {
                 try
                 {
+                    if (!string.IsNullOrEmpty(farmacia.Cep))
+                    {
+                        var endereco = await _viaCepService.BuscarEnderecoPorCepAsync(farmacia.Cep);
+                        if (endereco != null)
+                        {
+                            farmacia.Logradouro = endereco.Logradouro;
+                            farmacia.Bairro = endereco.Bairro;
+                            farmacia.Localidade = endereco.Localidade;
+                            farmacia.Uf = endereco.Uf;
+                        }
+                    }
+
                     _context.Update(farmacia);
                     await _context.SaveChangesAsync();
                 }
@@ -119,7 +142,7 @@ namespace projetoTP3_A2.Controllers
             return View(farmacia);
         }
 
-        // GET: Farmacia/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -137,9 +160,9 @@ namespace projetoTP3_A2.Controllers
             return View(farmacia);
         }
 
-        // POST: Farmacia/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var farmacia = await _context.Farmacia.FindAsync(id);

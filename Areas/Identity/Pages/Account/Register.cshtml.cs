@@ -72,7 +72,7 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
             public string Nome { get; set; }
 
             [Display(Name = "Perfil")]
-            public Perfis Perfil { get; set; } = Perfis.Paciente; // padrão
+            public Perfis Perfil { get; set; } = Perfis.Paciente;
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -85,6 +85,12 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            if (Input.Perfil == Perfis.Administrador)
+            {
+                ModelState.AddModelError("Input.Perfil", "Não é permitido registrar-se como Administrador por aqui.");
+                return Page();
+            }
 
             if (ModelState.IsValid)
             {
@@ -102,7 +108,6 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("Usuário criou uma nova conta com senha.");
 
-                    // 🔑 Atribui a Role correspondente ao enum
                     await _userManager.AddToRoleAsync(user, user.Perfil.ToString());
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -123,16 +128,15 @@ namespace projetoTP3_A2.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        // 🔑 Faz login já com o claim Perfil
                         var claims = new List<Claim>
                         {
                             new Claim("Perfil", user.Perfil.ToString())
                         };
                         await _signInManager.SignInWithClaimsAsync(user, isPersistent: false, claims);
 
-                        // 🚀 Redireciona conforme o perfil
                         switch (user.Perfil)
                         {
+                            // O case Administrador tecnicamente nunca será atingido aqui agora, mas pode manter
                             case Perfis.Administrador:
                                 return LocalRedirect("~/Home/Index");
 

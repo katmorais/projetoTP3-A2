@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<projetoTP3_A2.Models.Farmacia>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "_Layout"; // usa o layout padrão
+    ViewData["Title"] = "Farmácias";
+    Layout = "_Layout";
 }
 
 <style>
@@ -11,9 +11,9 @@
         font-weight: 600;
     }
 
-        .titulo-verde:hover {
-            color: #0F6E63;
-        }
+    .titulo-verde:hover {
+        color: #0F6E63;
+    }
 
     .btn-edit {
         background-color: #A7CFFF;
@@ -21,10 +21,10 @@
         border: none;
     }
 
-        .btn-edit:hover {
-            background-color: #8AB2F0;
-            color: #06306A;
-        }
+    .btn-edit:hover {
+        background-color: #8AB2F0;
+        color: #06306A;
+    }
 
     .btn-details {
         background-color: #7FDAD1;
@@ -32,10 +32,10 @@
         border: none;
     }
 
-        .btn-details:hover {
-            background-color: #5FCCBF;
-            color: #0B504D;
-        }
+    .btn-details:hover {
+        background-color: #5FCCBF;
+        color: #0B504D;
+    }
 
     .btn-delete {
         background-color: #F5A6A5;
@@ -43,22 +43,21 @@
         border: none;
     }
 
-        .btn-delete:hover {
-            background-color: #E98C8B;
-            color: #7C2928;
-        }
+    .btn-delete:hover {
+        background-color: #E98C8B;
+        color: #7C2928;
+    }
 
-    /* ✅ Botão Nova Farmácia (verde do sistema) */
     .btn-nova-farmacia {
         background-color: #14A091;
         color: #fff;
         border: none;
     }
 
-        .btn-nova-farmacia:hover {
-            background-color: #118072;
-            color: #fff;
-        }
+    .btn-nova-farmacia:hover {
+        background-color: #118072;
+        color: #fff;
+    }
 
     .table-custom thead tr th {
         background-color: #A7E8DF !important;
@@ -68,53 +67,66 @@
     .table-custom tbody tr td {
         background-color: #F9F9F9 !important;
         color: #333 !important;
+        vertical-align: middle;
     }
 
     .table-custom tbody tr:hover td {
         background-color: #E0F2F1 !important;
     }
-
-    .btn-sm {
-        border-radius: 0.3rem;
-    }
 </style>
 
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
-    </div>
+    <div class="row min-vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
+        </div>
 
-    <!-- Coluna do conteúdo principal -->
-    <h2 style="color:#14A091;" class="mb-4">Farmácias Cadastradas</h2>
+        <div class="col-md-10 p-4">
+            <h2 style="color:#14A091;" class="mb-4">Farmácias Cadastradas</h2>
 
-    <div class="d-flex justify-content-end mb-3">
-        <a asp-action="Create" class="btn btn-sm btn-nova-farmacia">
-            Nova Farmácia
-        </a>
-    </div>
-
-    <table class="table table-hover border rounded shadow-sm table-custom">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Nome)</th>
-                <th>@Html.DisplayNameFor(model => model.Endereco)</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+            @if (User.IsInRole("Administrador"))
             {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Nome)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Endereco)</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit me-1">Editar</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details me-1">Detalhes</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">Excluir</a>
-                    </td>
-                </tr>
+                <div class="d-flex justify-content-end mb-3">
+                    <a asp-action="Create" class="btn btn-sm btn-nova-farmacia shadow-sm">
+                        <i class="bi bi-plus-lg"></i> Nova Farmácia
+                    </a>
+                </div>
             }
-        </tbody>
-    </table>
+
+            <div class="table-responsive">
+                <table class="table table-hover border rounded shadow-sm table-custom">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                            <th>Endereço Completo</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold">@Html.DisplayFor(modelItem => item.Nome)</td>
+                                <td>
+                                    @item.Logradouro, @item.Numero @item.Complemento
+                                    <br />
+                                    <small class="text-muted">@item.Bairro - @item.Localidade/@item.Uf</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit"
+                                            title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details"
+                                            title="Detalhes"><i class="bi bi-eye-fill"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete"
+                                            title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,118 @@
+@model IEnumerable<projetoTP3_A2.Models.Prescricao>
+@using projetoTP3_A2.Models.Enum
+
+@{
+    ViewData["Title"] = "Histórico de Prescrições";
+    Layout = "_Layout";
+}
+
+<style>
+    .titulo-verde {
+        color: #14A091;
+        font-weight: 600;
+    }
+
+    .btn-nova {
+        background-color: #14A091;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-nova:hover {
+        background-color: #118072;
+        color: #fff;
+    }
+
+    .table-custom thead tr th {
+        background-color: #A7E8DF !important;
+        color: #0F6E63 !important;
+    }
+
+    .table-custom tbody tr td {
+        background-color: #F9F9F9 !important;
+        color: #333 !important;
+        vertical-align: middle;
+    }
+
+    /* Badges de Status */
+    .badge-pendente { background-color: #ffc107; color: #000; padding: 5px 10px; border-radius: 10px; font-size: 0.8em; }
+    .badge-realizado { background-color: #0d6efd; color: #fff; padding: 5px 10px; border-radius: 10px; font-size: 0.8em; }
+    .badge-liquidado { background-color: #198754; color: #fff; padding: 5px 10px; border-radius: 10px; font-size: 0.8em; }
+    .badge-cancelado { background-color: #dc3545; color: #fff; padding: 5px 10px; border-radius: 10px; font-size: 0.8em; }
+</style>
+
+<div class="container-fluid">
+    <div class="row min vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2 class="titulo-verde mb-4">Histórico de Prescrições</h2>
+
+            @if (User.IsInRole("Medico"))
+            {
+                <div class="d-flex justify-content-end mb-3">
+                    <a asp-action="Create" class="btn btn-sm btn-nova shadow-sm">
+                        <i class="bi bi-plus-lg"></i> Nova Prescrição
+                    </a>
+                </div>
+            }
+
+            <div class="table-responsive">
+                <table class="table table-hover border rounded shadow-sm table-custom">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Validade</th>
+                            <th>Status</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.DataPrescricao.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="fw-bold">@item.Paciente?.Nome</td>
+                                <td>@item.Medico?.Nome</td>
+                                <td>@item.DataValidade.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @switch (item.Status)
+                                    {
+                                        case PrescricaoStatus.Pendente:
+                                            <span class="badge badge-pendente">Pendente</span>
+                                            break;
+                                        case PrescricaoStatus.Realizado:
+                                            <span class="badge badge-realizado">Realizado</span>
+                                            break;
+                                        case PrescricaoStatus.Liquidado:
+                                            <span class="badge badge-liquidado">Liquidado</span>
+                                            break;
+                                        case PrescricaoStatus.Cancelado:
+                                            <span class="badge badge-cancelado">Cancelado</span>
+                                            break;
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info" title="Ver Medicamentos">
+                                        <i class="bi bi-eye-fill"></i> Detalhes
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-light text-center mt-3 border">
+                    <span class="text-muted">Nenhuma prescrição encontrada.</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>

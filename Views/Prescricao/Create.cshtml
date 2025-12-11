@@ -1,0 +1,79 @@
+@model projetoTP3_A2.Models.ViewModels.PrescricaoViewModel
+
+@{
+    ViewData["Title"] = "Nova Prescrição";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="row min vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4" style="color:#14A091;">Emitir Nova Prescrição</h2>
+
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+            {
+                <div class="alert alert-danger shadow-sm">
+                    <h4><i class="bi bi-exclamation-triangle-fill"></i> Atenção: Farmacovigilância</h4>
+                    <p>O sistema detectou riscos nesta prescrição:</p>
+                    <div asp-validation-summary="All" class="text-danger fw-bold"></div>
+                </div>
+            }
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <form asp-action="Create">
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PacienteId" class="form-label fw-bold">Paciente</label>
+                                <select asp-for="PacienteId" class="form-select" asp-items="ViewBag.PacienteId">
+                                    <option value="">Selecione um paciente...</option>
+                                </select>
+                                <span asp-validation-for="PacienteId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="MedicamentoId" class="form-label fw-bold">Medicamento</label>
+                                <select asp-for="MedicamentoId" class="form-select" asp-items="ViewBag.MedicamentoId">
+                                    <option value="">Selecione o medicamento...</option>
+                                </select>
+                                <span asp-validation-for="MedicamentoId" class="text-danger"></span>
+                                <small class="text-muted">O sistema verificará interações automaticamente.</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label asp-for="Quantidade" class="form-label">Qtd.</label>
+                                <input asp-for="Quantidade" class="form-control" type="number" min="1" />
+                                <span asp-validation-for="Quantidade" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-9 mb-3">
+                                <label asp-for="Instrucoes" class="form-label">Instruções de Uso</label>
+                                <input asp-for="Instrucoes" class="form-control" placeholder="Ex: Tomar 1 comprimido a cada 8 horas após as refeições" />
+                                <span asp-validation-for="Instrucoes" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-lg" style="background-color:#14A091;color:white;">
+                                <i class="bi bi-check-lg"></i> Emitir Prescrição
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

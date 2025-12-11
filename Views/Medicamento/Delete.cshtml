@@ -6,51 +6,42 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row min-vh-100">
 
-        <!-- Sidebar -->
-        <div class="col-md-2">
+        <div class="col-md-2 p-0">
             <partial name="_Sidebar" />
         </div>
 
-        <!-- Conteúdo principal -->
-        <div class="col-md-10">
-            <h2 class="mb-4" style="color:#6c757d;">Excluir Medicamento</h2>
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4" style="color:#dc3545;">Excluir Medicamento</h2>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h4 class="mb-3" style="color:#6c757d;">Tem certeza que deseja excluir este medicamento?</h4>
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Tem certeza que deseja excluir este medicamento? Esta ação é irreversível.
+                    </div>
 
-                    <dl class="row">
-
-                        <dt class="col-sm-3 text-muted">Nome</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
-
-                        <dt class="col-sm-3 text-muted">Dosagem</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Dosagem)</dd>
+                    <dl class="row mt-4">
+                        <dt class="col-sm-3 text-muted">Medicamento</dt>
+                        <dd class="col-sm-9 fw-bold">@Model.Nome (@Model.Dosagem)</dd>
 
                         <dt class="col-sm-3 text-muted">Tipo</dt>
-                        <dd class="col-sm-9">@Model.Tipo.ToString()</dd>
+                        <dd class="col-sm-9">@Model.Tipo</dd>
 
                         <dt class="col-sm-3 text-muted">Frequência</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Frequencia)</dd>
-
-                        <dt class="col-sm-3 text-muted">Observações</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Observacoes)</dd>
-
+                        <dd class="col-sm-9">@Model.Frequencia</dd>
                     </dl>
 
                     <form asp-action="Delete" method="post" class="mt-4">
                         <input type="hidden" asp-for="Id" />
 
                         <div class="d-flex justify-content-between">
-                            <input type="submit" value="Excluir" class="btn btn-danger" />
                             <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                            <input type="submit" value="Confirmar Exclusão" class="btn btn-danger" />
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

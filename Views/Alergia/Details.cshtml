@@ -6,35 +6,36 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row min-vh-100">
 
-        <!-- Sidebar -->
-        <div class="col-md-2">
+        <div class="col-md-2 p-0">
             <partial name="_Sidebar" />
         </div>
 
-        <!-- Conteúdo principal -->
-        <div class="col-md-10">
+        <div class="col-md-10 p-4">
             <h2 class="mb-4" style="color:#14A091;">Detalhes da Alergia</h2>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
 
                     <dl class="row">
-
                         <dt class="col-sm-3 text-muted">Nome</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
+                        <dd class="col-sm-9 fs-5">@Html.DisplayFor(model => model.Nome)</dd>
 
-                        <dt class="col-sm-3 text-muted">Reação</dt>
+                        <hr class="text-muted my-2" />
+
+                        <dt class="col-sm-3 text-muted">Reação Típica</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.Reacao)</dd>
-
                     </dl>
 
                     <div class="mt-4 d-flex justify-content-between">
-                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn"
-                           style="background-color:#14A091;color:white;">Editar</a>
-
                         <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                        
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn"
+                               style="background-color:#14A091;color:white;">Editar</a>
+                        }
                     </div>
 
                 </div>

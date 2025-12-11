@@ -1,0 +1,131 @@
+@model projetoTP3_A2.Models.Prescricao
+@using projetoTP3_A2.Models.Enum
+
+@{
+    ViewData["Title"] = "Detalhes da Prescrição";
+    Layout = "_Layout";
+}
+
+<style>
+    .titulo-verde {
+        color: #14A091;
+        font-weight: 600;
+    }
+    
+    .badge-pendente { background-color: #ffc107; color: #000; }
+    .badge-realizado { background-color: #0d6efd; color: #fff; }
+    .badge-liquidado { background-color: #198754; color: #fff; }
+    .badge-cancelado { background-color: #dc3545; color: #fff; }
+</style>
+
+<div class="container-fluid">
+    <div class="row min vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
+        </div>
+
+        <div class="col-md-10 p-4">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="titulo-verde">Detalhes da Prescrição</h2>
+                
+                <h3>
+                    @switch (Model.Status)
+                    {
+                        case PrescricaoStatus.Pendente:
+                            <span class="badge badge-pendente">Pendente</span>
+                            break;
+                        case PrescricaoStatus.Realizado:
+                            <span class="badge badge-realizado">Realizado</span>
+                            break;
+                        case PrescricaoStatus.Liquidado:
+                            <span class="badge badge-liquidado">Liquidado</span>
+                            break;
+                        case PrescricaoStatus.Cancelado:
+                            <span class="badge badge-cancelado">Cancelado</span>
+                            break;
+                    }
+                </h3>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0 text-secondary"><i class="bi bi-info-circle"></i> Dados do Atendimento</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4 text-muted">Paciente</dt>
+                                <dd class="col-sm-8 fw-bold fs-5">@Model.Paciente?.Nome</dd>
+
+                                <dt class="col-sm-4 text-muted">Médico</dt>
+                                <dd class="col-sm-8">@Model.Medico?.Nome</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4 text-muted">Data Emissão</dt>
+                                <dd class="col-sm-8">@Model.DataPrescricao.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                                <dt class="col-sm-4 text-muted">Válido Até</dt>
+                                <dd class="col-sm-8 text-danger fw-bold">@Model.DataValidade.ToString("dd/MM/yyyy")</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mb-3" style="color:#6c757d;">Itens Prescritos</h4>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered shadow-sm bg-white">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 30%;">Medicamento</th>
+                            <th style="width: 20%;">Dosagem / Tipo</th>
+                            <th style="width: 10%; text-align: center;">Qtd.</th>
+                            <th style="width: 40%;">Instruções de Uso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Itens != null && Model.Itens.Any())
+                        {
+                            @foreach (var item in Model.Itens)
+                            {
+                                <tr>
+                                    <td class="fw-bold" style="color: #0A3F7F;">
+                                        <i class="bi bi-capsule"></i> @item.Medicamento?.Nome
+                                    </td>
+                                    <td>
+                                        @item.Medicamento?.Dosagem <br />
+                                        <small class="text-muted">@item.Medicamento?.Tipo</small>
+                                    </td>
+                                    <td class="text-center fw-bold fs-5">@item.Quantidade</td>
+                                    <td>@item.InstrucoesUso</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Nenhum item encontrado nesta prescrição.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+
+                <button class="btn btn-outline-dark" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</div>

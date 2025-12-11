@@ -12,15 +12,15 @@ using projetoTP3_A2.Data;
 namespace projetoTP3_A2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251205025537_MedicamentosMenuLateralTables")]
-    partial class MedicamentosMenuLateralTables
+    [Migration("20251208122855_CorrigirRelacionamentoUsuario")]
+    partial class CorrigirRelacionamentoUsuario
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -160,6 +160,30 @@ namespace projetoTP3_A2.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("projetoTP3_A2.Models.Alergia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PacienteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reacao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Alergia");
+                });
+
             modelBuilder.Entity("projetoTP3_A2.Models.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -175,6 +199,11 @@ namespace projetoTP3_A2.Migrations
 
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -237,6 +266,54 @@ namespace projetoTP3_A2.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Exame", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DataRealizacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataSolicitacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Justificativa")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("MedicoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("PacienteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ResultadoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Exames");
                 });
 
             modelBuilder.Entity("projetoTP3_A2.Models.Farmacia", b =>
@@ -245,19 +322,72 @@ namespace projetoTP3_A2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Endereco")
+                    b.Property<string>("Bairro")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Cep")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("Complemento")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Localidade")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Logradouro")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("Numero")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Uf")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Farmacia", (string)null);
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.ItemPrescricao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("InstrucoesUso")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("MedicamentoId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PrescricaoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicamentoId");
+
+                    b.HasIndex("PrescricaoId");
+
+                    b.ToTable("ItensPrescricao");
                 });
 
             modelBuilder.Entity("projetoTP3_A2.Models.Medicamento", b =>
@@ -290,6 +420,103 @@ namespace projetoTP3_A2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Medicamento");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Patologia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PacienteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Patologia");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Prescricao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DataPrescricao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataValidade")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MedicoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PacienteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Prescricoes");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Medico", b =>
+                {
+                    b.HasBaseType("projetoTP3_A2.Models.ApplicationUser");
+
+                    b.Property<string>("CRM")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Especialidade")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Papel")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Medico");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Paciente", b =>
+                {
+                    b.HasBaseType("projetoTP3_A2.Models.ApplicationUser");
+
+                    b.Property<DateTime>("DataNascimento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Papel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Raca")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sexo")
+                        .HasColumnType("int");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.Property("Papel")
+                                .HasColumnName("Paciente_Papel");
+                        });
+
+                    b.HasDiscriminator().HasValue("Paciente");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -341,6 +568,89 @@ namespace projetoTP3_A2.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Alergia", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Paciente", null)
+                        .WithMany("Alergias")
+                        .HasForeignKey("PacienteId");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Exame", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Medico", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("projetoTP3_A2.Models.Paciente", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.ItemPrescricao", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Medicamento", "Medicamento")
+                        .WithMany()
+                        .HasForeignKey("MedicamentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("projetoTP3_A2.Models.Prescricao", "Prescricao")
+                        .WithMany("Itens")
+                        .HasForeignKey("PrescricaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medicamento");
+
+                    b.Navigation("Prescricao");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Patologia", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.Paciente", null)
+                        .WithMany("Patologias")
+                        .HasForeignKey("PacienteId");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Prescricao", b =>
+                {
+                    b.HasOne("projetoTP3_A2.Models.ApplicationUser", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("projetoTP3_A2.Models.ApplicationUser", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Prescricao", b =>
+                {
+                    b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("projetoTP3_A2.Models.Paciente", b =>
+                {
+                    b.Navigation("Alergias");
+
+                    b.Navigation("Patologias");
                 });
 #pragma warning restore 612, 618
         }

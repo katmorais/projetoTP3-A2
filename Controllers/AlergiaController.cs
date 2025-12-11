@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using projetoTP3_A2.Data;
 using projetoTP3_A2.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace projetoTP3_A2.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize]
     public class AlergiaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,13 +16,13 @@ namespace projetoTP3_A2.Controllers
             _context = context;
         }
 
-        // GET: Alergia
+        [Authorize(Roles = "Administrador,Medico,Farmaceutico")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Alergia.ToListAsync());
         }
 
-        // GET: Alergia/Details/5
+        [Authorize(Roles = "Administrador,Medico,Farmaceutico")]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -45,17 +40,15 @@ namespace projetoTP3_A2.Controllers
             return View(alergia);
         }
 
-        // GET: Alergia/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Alergia/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("Id,Nome,Reacao")] Alergia alergia)
         {
             if (ModelState.IsValid)
@@ -68,7 +61,7 @@ namespace projetoTP3_A2.Controllers
             return View(alergia);
         }
 
-        // GET: Alergia/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -84,11 +77,9 @@ namespace projetoTP3_A2.Controllers
             return View(alergia);
         }
 
-        // POST: Alergia/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(Guid id, [Bind("Id,Nome,Reacao")] Alergia alergia)
         {
             if (id != alergia.Id)
@@ -119,7 +110,7 @@ namespace projetoTP3_A2.Controllers
             return View(alergia);
         }
 
-        // GET: Alergia/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -137,9 +128,9 @@ namespace projetoTP3_A2.Controllers
             return View(alergia);
         }
 
-        // POST: Alergia/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var alergia = await _context.Alergia.FindAsync(id);

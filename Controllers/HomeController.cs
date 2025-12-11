@@ -6,52 +6,46 @@ namespace projetoTP3_A2.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        //ADM
-        [Authorize(Policy = "AdministradorPolicy")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Index()
         {
             ViewData["Title"] = "Área do Administrador";
             return View();
         }
 
-        //ADM
-        [Authorize(Policy = "AdministradorPolicy")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult MedicamentoHome()
         {
-            ViewData["Title"] = "Área do Administrador";
+            ViewData["Title"] = "Gestão de Medicamentos";
             return View();
         }
 
-        //ADM
-        [Authorize(Policy = "AdministradorPolicy")]
+        [Authorize(Roles = "Administrador")]
         public IActionResult AlergiaHome()
         {
-            ViewData["Title"] = "Área do Administrador";
-            return View(); // procura Views/Home/PacienteHome.cshtml
+            ViewData["Title"] = "Gestão de Alergias";
+            return View();
         }
 
-        //Farmaceutico
-        [Authorize(Policy = "FarmaceuticoPolicy")]
+        [Authorize(Roles = "Farmaceutico,Administrador")]
         public IActionResult FarmaceuticoHome()
         {
             ViewData["Title"] = "Área do Farmacêutico";
-            return View(); // procura Views/Home/FarmaceuticoHome.cshtml
+            return View();
         }
 
-        //Medico
-        [Authorize(Policy = "MedicoPolicy")]
+        [Authorize(Roles = "Medico,Administrador")]
         public IActionResult MedicoHome()
         {
             ViewData["Title"] = "Área do Médico";
-            return View(); // procura Views/Home/MedicoHome.cshtml
+            return View();
         }
 
-        //Paciente
-        [Authorize(Policy = "PacientePolicy")]
+        [Authorize(Roles = "Paciente,Administrador")]
         public IActionResult PacienteHome()
         {
             ViewData["Title"] = "Área do Paciente";
-            return View(); // procura Views/Home/PacienteHome.cshtml
+            return View();
         }
     }
 }

@@ -34,6 +34,14 @@ namespace projetoTP3_A2.Migrations
                     CriadoEm = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UltimoLoginEm = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Perfil = table.Column<int>(type: "int", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
+                    CRM = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Especialidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Papel = table.Column<int>(type: "int", nullable: true),
+                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Sexo = table.Column<int>(type: "int", nullable: true),
+                    Raca = table.Column<int>(type: "int", nullable: true),
+                    Paciente_Papel = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -59,12 +67,35 @@ namespace projetoTP3_A2.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Cep = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
+                    Logradouro = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Numero = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Complemento = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Bairro = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Localidade = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Uf = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Farmacia", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Medicamento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dosagem = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    Frequencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Observacoes = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Medicamento", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,6 +117,25 @@ namespace projetoTP3_A2.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Alergia",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Reacao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PacienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alergia", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Alergia_AspNetUsers_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -173,6 +223,116 @@ namespace projetoTP3_A2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Exames",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Justificativa = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ResultadoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataSolicitacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataRealizacao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    MedicoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PacienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exames", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Exames_AspNetUsers_MedicoId",
+                        column: x => x.MedicoId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Exames_AspNetUsers_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Patologia",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PacienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Patologia", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Patologia_AspNetUsers_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Prescricoes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataPrescricao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataValidade = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    MedicoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PacienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prescricoes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Prescricoes_AspNetUsers_MedicoId",
+                        column: x => x.MedicoId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Prescricoes_AspNetUsers_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ItensPrescricao",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PrescricaoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MedicamentoId = table.Column<int>(type: "int", nullable: false),
+                    Quantidade = table.Column<int>(type: "int", nullable: false),
+                    InstrucoesUso = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItensPrescricao", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ItensPrescricao_Medicamento_MedicamentoId",
+                        column: x => x.MedicamentoId,
+                        principalTable: "Medicamento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ItensPrescricao_Prescricoes_PrescricaoId",
+                        column: x => x.PrescricaoId,
+                        principalTable: "Prescricoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alergia_PacienteId",
+                table: "Alergia",
+                column: "PacienteId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -211,11 +371,49 @@ namespace projetoTP3_A2.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Exames_MedicoId",
+                table: "Exames",
+                column: "MedicoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Exames_PacienteId",
+                table: "Exames",
+                column: "PacienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItensPrescricao_MedicamentoId",
+                table: "ItensPrescricao",
+                column: "MedicamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItensPrescricao_PrescricaoId",
+                table: "ItensPrescricao",
+                column: "PrescricaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patologia_PacienteId",
+                table: "Patologia",
+                column: "PacienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Prescricoes_MedicoId",
+                table: "Prescricoes",
+                column: "MedicoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Prescricoes_PacienteId",
+                table: "Prescricoes",
+                column: "PacienteId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Alergia");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -232,10 +430,25 @@ namespace projetoTP3_A2.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Exames");
+
+            migrationBuilder.DropTable(
                 name: "Farmacia");
 
             migrationBuilder.DropTable(
+                name: "ItensPrescricao");
+
+            migrationBuilder.DropTable(
+                name: "Patologia");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Medicamento");
+
+            migrationBuilder.DropTable(
+                name: "Prescricoes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

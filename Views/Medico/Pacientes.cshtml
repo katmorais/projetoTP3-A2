@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<projetoTP3_A2.Controllers.PacienteListItem>
+
 @{
-    ViewData["Title"] = "Pacientes";
+    ViewData["Title"] = "Listagem de Pacientes";
     Layout = "_Layout";
 }
 
@@ -14,106 +15,148 @@
         background-color: #118072;
         color: #fff;
     }
-    .table-custom thead th {
+
+    .table-custom thead tr th {
         background-color: #D0F5F2 !important;
         color: #14A091 !important;
+        border-bottom: 2px solid #14A091;
     }
-    .table-custom tbody td {
-        background-color: #E7FDFB !important;
-        color: #14A091 !important;
+    .table-custom tbody tr td {
+        background-color: #F9F9F9 !important;
+        color: #333 !important;
+        vertical-align: middle;
     }
     .table-custom tbody tr:hover td {
-        background-color: #C4ECE9 !important;
-        color: #14A091 !important;
+        background-color: #E0F2F1 !important;
+        color: #0F6E63 !important;
+    }
+
+    .page-link {
+        color: #14A091;
+    }
+    .page-link:hover {
+        color: #118072;
+        background-color: #e9ecef;
+    }
+    .page-item.active .page-link {
+        background-color: #14A091;
+        border-color: #14A091;
+        color: white;
     }
 </style>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2">
+    <div class="row min-vh-100">
+        <div class="col-md-2 p-0">
             <partial name="_Sidebar" />
         </div>
-        <div class="col-md-10">
-            <h2 style="color:#14A091;" class="mb-4">Pacientes</h2>
 
-            <form method="get" class="d-flex mb-3">
-                <input type="text" name="query" value="@Context.Request.Query["query"]"
-                       class="form-control me-2" placeholder="Buscar por nome..." />
+        <div class="col-md-10 p-4">
+            <h2 style="color:#14A091;" class="mb-4">Pacientes Cadastrados</h2>
 
-                <select name="pageSize" class="form-select me-2" style="width:120px;" onchange="this.form.submit()">
-                    <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
-                    <option value="20" selected="@(ViewBag.PageSize == 20)">20</option>
-                    <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
-                </select>
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-3">
+                    <form method="get" class="row g-2 align-items-center">
+                        <div class="col-md-6">
+                            <input type="text" name="query" value="@Context.Request.Query["query"]"
+                                   class="form-control" placeholder="Buscar por nome do paciente..." />
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <select name="pageSize" class="form-select" onchange="this.form.submit()">
+                                <option value="10" selected="@(ViewBag.PageSize == 10)">10 por pág.</option>
+                                <option value="20" selected="@(ViewBag.PageSize == 20)">20 por pág.</option>
+                                <option value="50" selected="@(ViewBag.PageSize == 50)">50 por pág.</option>
+                            </select>
+                        </div>
 
-                <button type="submit" class="btn btn-sm btn-pesquisar">Pesquisar</button>
-            </form>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-pesquisar w-100">
+                                <i class="bi bi-search"></i> Pesquisar
+                            </button>
+                        </div>
+                        
+                        <div class="col-md-2">
+                             @if (!string.IsNullOrEmpty(Context.Request.Query["query"]))
+                             {
+                                 <a asp-action="Pacientes" class="btn btn-outline-secondary w-100">Limpar</a>
+                             }
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-            <table class="table table-hover border rounded shadow-sm table-custom">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var p in Model)
-                    {
-                        <tr>
-                            <td>@p.Nome</td>
-                            <td>@p.Email</td>
-                            <td>
-                                <a asp-controller="Medico" asp-action="Prontuario" asp-route-id="@p.Id"
-                                   class="btn btn-sm btn-details">Ver prontuário</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover border rounded shadow-sm table-custom">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th class="text-center" style="width: 180px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@p.Nome</td>
+                                    <td>@p.Email</td>
+                                    <td class="text-center">
+                                        <a asp-controller="Medico" asp-action="Prontuario" asp-route-id="@p.Id"
+                                           class="btn btn-sm btn-outline-success shadow-sm">
+                                            <i class="bi bi-file-medical"></i> Ver Prontuário
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
-            <!-- Paginação -->
-            <nav>
-                <ul class="pagination">
-                    @{
-                        int totalPages = (int)Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize);
-                        int currentPage = ViewBag.Page;
+                <nav aria-label="Navegação de página" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        @{
+                            int totalPages = (int)Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize);
+                            int currentPage = ViewBag.Page;
+                            var currentQuery = Context.Request.Query["query"];
 
-                        // Botão anterior
-                        if (currentPage > 1)
-                        {
-                            <li class="page-item">
-                                <a class="page-link"
-                                   href="@Url.Action("Pacientes", new { page = currentPage - 1, pageSize = ViewBag.PageSize, query = Context.Request.Query["query"] })">
-                                    « Anterior
+                            // Botão Anterior
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" href="@Url.Action("Pacientes", new { page = currentPage - 1, pageSize = ViewBag.PageSize, query = currentQuery })">
+                                    &laquo; Anterior
+                                </a>
+                            </li>
+
+                            // Números das Páginas
+                            for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" href="@Url.Action("Pacientes", new { page = i, pageSize = ViewBag.PageSize, query = currentQuery })">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            // Botão Próximo
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link" href="@Url.Action("Pacientes", new { page = currentPage + 1, pageSize = ViewBag.PageSize, query = currentQuery })">
+                                    Próxima &raquo;
                                 </a>
                             </li>
                         }
+                    </ul>
+                </nav>
+            }
+            else
+            {
+                <div class="alert alert-light text-center border mt-4">
+                    <i class="bi bi-search text-muted fs-4 d-block mb-2"></i>
+                    <span class="text-muted">Nenhum paciente encontrado com esses critérios.</span>
+                </div>
+            }
 
-                        // Números
-                        for (int i = 1; i <= totalPages; i++)
-                        {
-                            <li class="page-item @(i == currentPage ? "active" : "")">
-                                <a class="page-link"
-                                   href="@Url.Action("Pacientes", new { page = i, pageSize = ViewBag.PageSize, query = Context.Request.Query["query"] })">
-                                    @i
-                                </a>
-                            </li>
-                        }
-
-                        // Botão próximo
-                        if (currentPage < totalPages)
-                        {
-                            <li class="page-item">
-                                <a class="page-link"
-                                   href="@Url.Action("Pacientes", new { page = currentPage + 1, pageSize = ViewBag.PageSize, query = Context.Request.Query["query"] })">
-                                    Próxima »
-                                </a>
-                            </li>
-                        }
-                    }
-                </ul>
-            </nav>
         </div>
     </div>
 </div>

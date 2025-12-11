@@ -6,47 +6,52 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row min-vh-100">
 
-        <!-- Sidebar -->
-        <div class="col-md-2">
+        <div class="col-md-2 p-0">
             <partial name="_Sidebar" />
         </div>
 
-        <!-- Conteúdo principal -->
-        <div class="col-md-10">
+        <div class="col-md-10 p-4">
             <h2 class="mb-4" style="color:#14A091;">Detalhes do Medicamento</h2>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="bg-light p-3 rounded-circle me-3 text-primary">
+                            <i class="bi bi-capsule fs-1"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-0">@Model.Nome</h4>
+                            <span class="text-muted">@Model.Dosagem</span>
+                        </div>
+                    </div>
+
                     <dl class="row">
+                        <dt class="col-sm-3 text-muted">Tipo de Apresentação</dt>
+                        <dd class="col-sm-9">@Model.Tipo</dd>
 
-                        <dt class="col-sm-3 text-muted">Nome</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
-
-                        <dt class="col-sm-3 text-muted">Dosagem</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Dosagem)</dd>
-
-                        <dt class="col-sm-3 text-muted">Tipo</dt>
-                        <dd class="col-sm-9">@Model.Tipo.ToString()</dd>
-
-                        <dt class="col-sm-3 text-muted">Frequência</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Frequencia)</dd>
+                        <dt class="col-sm-3 text-muted">Frequência Sugerida</dt>
+                        <dd class="col-sm-9">@Model.Frequencia</dd>
 
                         <dt class="col-sm-3 text-muted">Observações</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Observacoes)</dd>
-
+                        <dd class="col-sm-9">
+                            @(string.IsNullOrEmpty(Model.Observacoes) ? "Nenhuma observação registrada." : Model.Observacoes)
+                        </dd>
                     </dl>
 
                     <div class="mt-4 d-flex justify-content-between">
-                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn"
-                           style="background-color:#14A091;color:white;">Editar</a>
-
                         <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                        
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn"
+                               style="background-color:#14A091;color:white;">Editar</a>
+                        }
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

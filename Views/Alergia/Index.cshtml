@@ -1,129 +1,85 @@
 ﻿@model IEnumerable<projetoTP3_A2.Models.Alergia>
 
 @{
-    ViewData["Title"] = "Área do Administrador";
+    ViewData["Title"] = "Gestão de Alergias";
     Layout = "_Layout";
 }
 
 <style>
-    .titulo-verde {
-        color: #14A091;
-        font-weight: 600;
-    }
-
-        .titulo-verde:hover {
-            color: #0F6E63;
-        }
-
-    .btn-edit {
-        background-color: #A7CFFF;
-        color: #0A3F7F;
-        border: none;
-    }
-
-        .btn-edit:hover {
-            background-color: #8AB2F0;
-            color: #06306A;
-        }
-
-    .btn-details {
-        background-color: #7FDAD1;
-        color: #0F6E63;
-        border: none;
-    }
-
-        .btn-details:hover {
-            background-color: #5FCCBF;
-            color: #0B504D;
-        }
-
-    .btn-delete {
-        background-color: #F5A6A5;
-        color: #A93A39;
-        border: none;
-    }
-
-        .btn-delete:hover {
-            background-color: #E98C8B;
-            color: #7C2928;
-        }
-
-    .btn-nova-alergia {
-        background-color: #14A091;
-        color: #fff;
-        border: none;
-    }
-
-        .btn-nova-alergia:hover {
-            background-color: #118072;
-            color: #fff;
-        }
-
-    .table-custom thead tr th {
-        background-color: #A7E8DF !important;
-        color: #0F6E63 !important;
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    .table-custom tbody tr td {
-        background-color: #F9F9F9 !important;
-        color: #333 !important;
-        vertical-align: middle;
-    }
-
-    .table-custom tbody tr:hover td {
-        background-color: #E0F2F1 !important;
-    }
-
-    .btn-sm {
-        border-radius: 0.3rem;
-    }
+    .titulo-verde { color: #14A091; font-weight: 600; }
+    .btn-nova { background-color: #14A091; color: #fff; border: none; }
+    .btn-nova:hover { background-color: #118072; color: #fff; }
+    
+    .table-custom thead tr th { background-color: #A7E8DF !important; color: #0F6E63 !important; text-align: center; }
+    .table-custom tbody tr td { background-color: #F9F9F9 !important; color: #333 !important; vertical-align: middle; }
+    .table-custom tbody tr:hover td { background-color: #E0F2F1 !important; }
 </style>
 
 <div class="container-fluid">
-
-    <!-- Sidebar -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
-    </div>
-
-    <!-- Conteúdo principal -->
-    <div class="col-md-10">
-        <h2 class="mb-4 titulo-verde">Alergias Cadastradas</h2>
-
-        <div class="d-flex justify-content-end mb-3">
-            <a asp-action="Create" class="btn btn-sm btn-nova-alergia">
-                Nova Alergia
-            </a>
+    <div class="row min-vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-hover border rounded shadow-sm table-custom text-center">
-                <thead>
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.First().Nome)</th>
-                        <th>@Html.DisplayNameFor(model => model.First().Reacao)</th>
-                        <th style="width: 220px;">Ações</th>
-                    </tr>
-                </thead>
+        <div class="col-md-10 p-4">
+            <h2 class="mb-4 titulo-verde">Alergias Cadastradas</h2>
 
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+            @if (User.IsInRole("Administrador"))
+            {
+                <div class="d-flex justify-content-end mb-3">
+                    <a asp-action="Create" class="btn btn-sm btn-nova shadow-sm">
+                        <i class="bi bi-plus-lg"></i> Nova Alergia
+                    </a>
+                </div>
+            }
+
+            <div class="table-responsive">
+                <table class="table table-hover border rounded shadow-sm table-custom text-center">
+                    <thead>
                         <tr>
-                            <td>@item.Nome</td>
-                            <td>@item.Reacao</td>
-                            <td class="d-flex justify-content-center gap-1">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-edit">Editar</a>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-details">Detalhes</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-delete">Excluir</a>
-                            </td>
+                            <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                            <th>@Html.DisplayNameFor(model => model.Reacao)</th>
+                            <th style="width: 220px;">Ações</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold">@item.Nome</td>
+                                <td>@item.Reacao</td>
+                                <td class="d-flex justify-content-center gap-1">
+                                    
+                                    @if (User.IsInRole("Administrador"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="Editar">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                    }
 
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info" title="Detalhes">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+
+                                    @if (User.IsInRole("Administrador"))
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Excluir">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+            @if (!Model.Any())
+            {
+                <div class="alert alert-light text-center border mt-3">
+                    Nenhuma alergia cadastrada.
+                </div>
+            }
+        </div>
     </div>
 </div>

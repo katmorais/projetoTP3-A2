@@ -1,11 +1,68 @@
 ﻿@{
     ViewData["Title"] = "Área do Médico";
-    Layout = "_Layout"; // usa o layout padrão com navbar e rodapé
+    Layout = "_Layout";
 }
 
 <div class="container-fluid">
-    <!-- Coluna do menu lateral -->
-    <div class="col-md-2">
-        <partial name="_Sidebar" />
+    <div class="row min-vh-100">
+        <div class="col-md-2 p-0">
+            <partial name="_Sidebar" />
+        </div>
+
+        <div class="col-md-10 p-4">
+            <h2 style="color:#14A091;" class="mb-4">Área Médica</h2>
+            
+            <div class="alert alert-light border shadow-sm">
+                <i class="bi bi-info-circle-fill" style="color:#14A091;"></i> 
+                Lembre-se de verificar o histórico de interações medicamentosas antes de emitir novas receitas.
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-light p-3 rounded-circle me-3">
+                                <i class="bi bi-file-earmark-medical fs-2" style="color:#14A091;"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title">Emitir Prescrição</h5>
+                                <p class="card-text text-muted small">Crie novas receitas com validação da FDA.</p>
+                                <a asp-controller="Prescricao" asp-action="Create" class="btn btn-sm text-white" style="background-color:#14A091;">Nova Prescrição</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-light p-3 rounded-circle me-3">
+                                <i class="bi bi-clock-history fs-2 text-secondary"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title">Histórico de Prescrições</h5>
+                                <p class="card-text text-muted small">Visualize todas as receitas emitidas por você.</p>
+                                <a asp-controller="Prescricao" asp-action="Index" class="btn btn-sm btn-outline-secondary">Ver Histórico</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                 <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="bg-light p-3 rounded-circle me-3">
+                                <i class="bi bi-people fs-2 text-primary"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title">Meus Pacientes</h5>
+                                <p class="card-text text-muted small">Consulte prontuários e dados cadastrais.</p>
+                                <a asp-controller="Medico" asp-action="Pacientes" class="btn btn-sm btn-outline-primary">Buscar Paciente</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

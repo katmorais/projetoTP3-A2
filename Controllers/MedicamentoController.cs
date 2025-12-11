@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using projetoTP3_A2.Data;
 using projetoTP3_A2.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace projetoTP3_A2.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize]
     public class MedicamentoController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,13 +16,13 @@ namespace projetoTP3_A2.Controllers
             _context = context;
         }
 
-        // GET: Medicamento
+        [Authorize(Roles = "Administrador,Medico,Farmaceutico")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Medicamento.ToListAsync());
         }
 
-        // GET: Medicamento/Details/5
+        [Authorize(Roles = "Administrador,Medico,Farmaceutico")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,17 +40,15 @@ namespace projetoTP3_A2.Controllers
             return View(medicamento);
         }
 
-        // GET: Medicamento/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Medicamento/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("Id,Nome,Dosagem,Tipo,Frequencia,Observacoes")] Medicamento medicamento)
         {
             if (ModelState.IsValid)
@@ -67,7 +60,7 @@ namespace projetoTP3_A2.Controllers
             return View(medicamento);
         }
 
-        // GET: Medicamento/Edit/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,11 +76,9 @@ namespace projetoTP3_A2.Controllers
             return View(medicamento);
         }
 
-        // POST: Medicamento/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Dosagem,Tipo,Frequencia,Observacoes")] Medicamento medicamento)
         {
             if (id != medicamento.Id)
@@ -118,7 +109,7 @@ namespace projetoTP3_A2.Controllers
             return View(medicamento);
         }
 
-        // GET: Medicamento/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,9 +127,9 @@ namespace projetoTP3_A2.Controllers
             return View(medicamento);
         }
 
-        // POST: Medicamento/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var medicamento = await _context.Medicamento.FindAsync(id);

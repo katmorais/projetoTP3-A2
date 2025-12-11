@@ -7,64 +7,60 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row min-vh-100">
 
-        <!-- Sidebar -->
-        <div class="col-md-2">
+        <div class="col-md-2 p-0">
             <partial name="_Sidebar" />
         </div>
 
-        <!-- Conteúdo principal -->
-        <div class="col-md-10">
+        <div class="col-md-10 p-4">
             <h2 class="mb-4" style="color:#14A091;">Editar Medicamento</h2>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <form asp-action="Edit" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
                         <input type="hidden" asp-for="Id" />
 
-                        <!-- Nome -->
-                        <div class="mb-3">
-                            <label asp-for="Nome" class="form-label">Nome do Medicamento</label>
-                            <input asp-for="Nome" class="form-control" />
-                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nome" class="form-label fw-bold">Nome do Medicamento</label>
+                                <input asp-for="Nome" class="form-control" />
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Dosagem" class="form-label fw-bold">Dosagem</label>
+                                <input asp-for="Dosagem" class="form-control" />
+                                <span asp-validation-for="Dosagem" class="text-danger"></span>
+                            </div>
                         </div>
 
-                        <!-- Dosagem -->
-                        <div class="mb-3">
-                            <label asp-for="Dosagem" class="form-label">Dosagem</label>
-                            <input asp-for="Dosagem" class="form-control" />
-                            <span asp-validation-for="Dosagem" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Tipo" class="form-label fw-bold">Tipo</label>
+                                <select asp-for="Tipo" class="form-control form-select"
+                                        asp-items="Html.GetEnumSelectList<TipoMedicamento>()">
+                                </select>
+                                <span asp-validation-for="Tipo" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-8 mb-3">
+                                <label asp-for="Frequencia" class="form-label fw-bold">Frequência Padrão</label>
+                                <input asp-for="Frequencia" class="form-control" />
+                                <span asp-validation-for="Frequencia" class="text-danger"></span>
+                            </div>
                         </div>
 
-                        <!-- Tipo (ENUM) -->
                         <div class="mb-3">
-                            <label asp-for="Tipo" class="form-label">Tipo</label>
-                            <select asp-for="Tipo" class="form-control"
-                                    asp-items="Html.GetEnumSelectList<TipoMedicamento>()">
-                            </select>
-                            <span asp-validation-for="Tipo" class="text-danger"></span>
-                        </div>
-
-                        <!-- Frequência -->
-                        <div class="mb-3">
-                            <label asp-for="Frequencia" class="form-label">Frequência</label>
-                            <input asp-for="Frequencia" class="form-control" />
-                            <span asp-validation-for="Frequencia" class="text-danger"></span>
-                        </div>
-
-                        <!-- Observações -->
-                        <div class="mb-3">
-                            <label asp-for="Observacoes" class="form-label">Observações</label>
-                            <textarea asp-for="Observacoes" class="form-control"></textarea>
+                            <label asp-for="Observacoes" class="form-label fw-bold">Observações</label>
+                            <textarea asp-for="Observacoes" class="form-control" rows="3"></textarea>
                             <span asp-validation-for="Observacoes" class="text-danger"></span>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-3">
+                        <div class="d-flex justify-content-between mt-4">
                             <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
-                            <button type="submit" class="btn" style="background-color:#14A091;color:white;">Salvar</button>
+                            <button type="submit" class="btn" style="background-color:#14A091;color:white;">Salvar Alterações</button>
                         </div>
 
                     </form>
@@ -75,6 +71,5 @@
 </div>
 
 @section Scripts {
-    @Html.Partial("_ValidationScriptsPartial")
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
